@@ -110,6 +110,28 @@ class TaskListScreen extends StatelessWidget {
                     child: Dismissible(
                       key: Key(task.id),
                       direction: DismissDirection.endToStart,
+                      confirmDismiss: (_) async {
+                        return await Get.dialog<bool>(
+                              AlertDialog(
+                                title: const Text('Delete Task'),
+                                content: Text(
+                                    'Are you sure you want to delete "${task.title}"?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Get.back(result: false),
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => Get.back(result: true),
+                                    child: const Text('Delete',
+                                        style:
+                                            TextStyle(color: Colors.redAccent)),
+                                  ),
+                                ],
+                              ),
+                            ) ??
+                            false;
+                      },
                       background: Container(
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.only(right: 20),
@@ -124,6 +146,7 @@ class TaskListScreen extends StatelessWidget {
                       onDismissed: (_) => ctrl.deleteTask(task.id),
                       child: GlassCard(
                         onTap: () => Get.to(() => AddTaskScreen(task: task)),
+                        onLongPress: () => _showDeleteDialog(ctrl, task),
                         child: Row(
                           children: [
                             GestureDetector(
@@ -232,6 +255,27 @@ class TaskListScreen extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void _showDeleteDialog(TaskController ctrl, dynamic task) {
+    Get.dialog(AlertDialog(
+      title: const Text('Delete Task'),
+      content: Text('Are you sure you want to delete "${task.title}"?'),
+      actions: [
+        TextButton(
+          onPressed: () => Get.back(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.back();
+            ctrl.deleteTask(task.id);
+          },
+          child:
+              const Text('Delete', style: TextStyle(color: Colors.redAccent)),
+        ),
+      ],
+    ));
   }
 }
 

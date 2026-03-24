@@ -6,6 +6,7 @@ class GlassCard extends StatelessWidget {
   final EdgeInsets? padding;
   final EdgeInsets? margin;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final Color? color;
   final double borderRadius;
 
@@ -15,6 +16,7 @@ class GlassCard extends StatelessWidget {
     this.padding,
     this.margin,
     this.onTap,
+    this.onLongPress,
     this.color,
     this.borderRadius = 16,
   });
@@ -45,6 +47,7 @@ class GlassCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
+          onLongPress: onLongPress,
           borderRadius: BorderRadius.circular(borderRadius),
           child: Padding(
             padding: padding ?? const EdgeInsets.all(16),
